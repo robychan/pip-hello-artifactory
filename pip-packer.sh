@@ -33,7 +33,19 @@ then
 	fi
 elif [ "$1" == "--clean" -o "$1" == "-c" ]
 then
-	rm -rf $name-$version.tar.gz
+	if [ -f setup.py ]
+	then
+		name=$(cat *.egg-info/PKG-INFO | grep ^Name |cut -f 2 -d ' ') #gets the package name
+                version=$(cat *.egg-info/PKG-INFO | grep ^Version |cut -f 2 -d ' ') #gets the package version
+		if [ -f $name-$version.tar.gz ]
+		then
+			rm -rf $name-$version.tar.gz
+		else
+			echo "$name-$version.tar.gz doesn't exist in this directory!"
+		fi
+	else
+		echo "setup.py doesn't exist!"
+	fi
 elif [ "$1" == "--help" ]
 then
         printf "Usage: bash pip-packer.sh [option]\n"

@@ -4,7 +4,8 @@ if [ "$#" -eq "0" -o "$1" == "--build" -o "$1" == "-b" ]
 then
 	if [ -f setup.py ]
 	then
-		python setup.py bdist_wheel --universal #builds the pip package
+#		python setup.py bdist_wheel --universal #builds the pip package. This is the recommended method I think. If using Jenkins pipeline or shell where wheel is not install. THen use the below command
+		python setup.py bdist
 		if [ "$?" -eq 0 ]
 		then
 			if [ -f *.egg-info/PKG-INFO ]

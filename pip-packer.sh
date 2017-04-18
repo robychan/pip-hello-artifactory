@@ -16,9 +16,8 @@ then
 		then
 			if [ -f *.egg-info/PKG-INFO ]
 			then
-				name=$(cat *.egg-info/PKG-INFO | grep ^Name |cut -f 2 -d ' ') #gets the package name
-				version=$(cat *.egg-info/PKG-INFO | grep ^Version |cut -f 2 -d ' ') #gets the package version
-
+				name=$(grep ^Name *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves the name of the package
+				version=$(grep ^Version *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves th version of the package
 				#creates the tar file after creating relevant files
 				mkdir $name-$version
 				cp -rf $name setup.py *.egg-info *.egg-info/PKG-INFO $name-$version/
@@ -42,8 +41,8 @@ elif [ "$1" == "--clean" -o "$1" == "-c" ]
 then
 	if [ -f setup.py ]
 	then
-		name=$(cat *.egg-info/PKG-INFO | grep ^Name |cut -f 2 -d ' ') #gets the package name
-                version=$(cat *.egg-info/PKG-INFO | grep ^Version |cut -f 2 -d ' ') #gets the package version
+		name=$(grep ^Name *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves the name of the package
+		version=$(grep ^Version *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves th version of the package
 		if [ -f $name-$version.tar.gz ]
 		then
 			rm -rf $name-$version.tar.gz

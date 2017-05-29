@@ -11,23 +11,27 @@ then
 	if [ -f setup.py ]
 	then
 #		python setup.py bdist_wheel --universal #builds the pip package. This is the recommended method I think. If using Jenkins pipeline or shell where wheel is not install. Then use the below command
-		python setup.py bdist
+#		python setup.py bdist
+		python setup.py sdist
 		if [ "$?" -eq 0 ]
 		then
-			if [ -f *.egg-info/PKG-INFO ]
+			ls dist/*
+			if [ "$?" -eq 0 ]
 			then
-				name=$(grep ^Name *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves the name of the package
-				version=$(grep ^Version *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves th version of the package
-				#creates the tar file after creating relevant files
-				mkdir $name-$version
-				cp -rf $name setup.py *.egg-info *.egg-info/PKG-INFO $name-$version/
-	
-				#	not sure how to generate setup.cfg
-				#	but for now:
-				printf "[egg_info]\ntag_build = 0\ntag_date = 0\ntag_svn_revision = 0">$name-$version/setup.cfg
-
-				tar -zcvf $name-$version.tar.gz $name-$version/
-				rm -rf $name-$version/
+				# name=$(grep ^Name *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves the name of the package
+# 				version=$(grep ^Version *.egg-info/PKG-INFO | cut -f 2 -d ':' |tr -d " ")	#retrieves th version of the package
+# 				#creates the tar file after creating relevant files
+# 				mkdir $name-$version
+# 				cp -rf $name setup.py *.egg-info *.egg-info/PKG-INFO $name-$version/
+# 	
+# 				#	not sure how to generate setup.cfg
+# 				#	but for now:
+# 				printf "[egg_info]\ntag_build = 0\ntag_date = 0\ntag_svn_revision = 0">$name-$version/setup.cfg
+# 
+# 				tar -zcvf $name-$version.tar.gz $name-$version/
+# 				rm -rf $name-$version/
+				cp dist/* .
+				rm -rf dist
 			else
 				echo "PKG-INFO doesn't exist in package's egg-info directory"
 			fi
